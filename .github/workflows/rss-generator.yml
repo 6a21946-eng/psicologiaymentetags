@@ -1,15 +1,25 @@
-name: Actualizar RSS
+name: Generar RSS
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Esto corre una vez al día a medianoche UTC
-  workflow_dispatch:      # Permite ejecutar manualmente también
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repo
+      - name: Clonar repositorio
         uses: actions/checkout@v3
-      - name: Mensaje de prueba
-        run: echo "GitHub Actions configurado correctamente"
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Instalar dependencias
+        run: pip install requests beautifulsoup4
+
+      - name: Ejecutar script
+        run: python generate_rss.py
